@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text.RegularExpressions;
 
 namespace Calculator
 {
@@ -8,7 +9,7 @@ namespace Calculator
         /** 
          @basic - helper function
          */
-        static string TruncateNumber(double number)
+        private string TruncateNumber(double number)
         {
             // Convert the number to a string
             string numberString = number.ToString();
@@ -42,7 +43,9 @@ namespace Calculator
         private string currentCalculation = "";
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent(GetButtonEquals());
+           
+
         }
         private void button0_Click(object sender, EventArgs e)
         {
@@ -131,19 +134,48 @@ namespace Calculator
 
         private void buttonDecimal_Click(object sender, EventArgs e)
         {
-            // This adds the number or operator to the string calculation
+            // Check if the current calculation is empty or ends with an operator
+            if (currentCalculation == "" || "+-×÷".Contains(currentCalculation[currentCalculation.Length - 1]))
+            {
+                // If so, add "0" before the decimal point
+                currentCalculation += "0";
+            }
+
+            // Add the decimal point to the current calculation
             currentCalculation += ((Button)sender).Text;
 
             // Display the current calculation back to the user
             textBoxOutput.Text = currentCalculation;
+        
         }
 
         private void buttonEquals_Click(object sender, EventArgs e)
         {
-            string formattedCalculation = currentCalculation.ToString().Replace("×", "*").ToString().Replace("÷", "/").ToString().Replace("−", "-");
+            // Replace "×" with "*", "÷" with "/", and "−" with "-"
+            string formattedCalculation = currentCalculation.Replace("×", "*")
+                                                             .Replace("÷", "/")
+                                                             .Replace("−", "-");
+
 
             try
             {
+                // Parse the expression to identify division operations
+                string[] tokens = formattedCalculation.Split('+', '-', '*', '/');
+                foreach (string token in tokens)
+                {
+                    // Check if the token is a division operation
+                    if (token.Contains("/"))
+                    {
+                        // If the division operation is between integers, append ".0" to one of the operands
+                        string[] operands = token.Split('/');
+                        if (operands.Length == 2 && int.TryParse(operands[0], out _) && int.TryParse(operands[1], out _))
+                        {
+                            formattedCalculation = formattedCalculation.Replace(token, $"{operands[0]}.0/{operands[1]}");
+                            break; // No need to continue after modifying one division operation
+                        }
+                    }
+                }
+
                 // Calculate the result
                 double result = Convert.ToDouble(new DataTable().Compute(formattedCalculation, null));
 
@@ -163,6 +195,12 @@ namespace Calculator
 
         private void buttonPlus_Click(object sender, EventArgs e)
         {
+            // Check if the current calculation is empty or ends with an operator
+            if (currentCalculation == "" || "+-×÷".Contains(currentCalculation[currentCalculation.Length - 1]))
+            {
+                // If so, add "0" before the plus operator
+                currentCalculation += "0";
+            }
             // This adds the number or operator to the string calculation
             currentCalculation += ((Button)sender).Text;
 
@@ -172,6 +210,12 @@ namespace Calculator
 
         private void buttonMinus_Click(object sender, EventArgs e)
         {
+            // Check if the current calculation is empty or ends with an operator
+            if (currentCalculation == "" || "+-×÷".Contains(currentCalculation[currentCalculation.Length - 1]))
+            {
+                // If so, add "0" before the plus operator
+                currentCalculation += "0";
+            }
             // This adds the number or operator to the string calculation
             currentCalculation += ((Button)sender).Text;
 
@@ -181,6 +225,12 @@ namespace Calculator
 
         private void buttonMulti_Click(object sender, EventArgs e)
         {
+            // Check if the current calculation is empty or ends with an operator
+            if (currentCalculation == "" || "+-×÷".Contains(currentCalculation[currentCalculation.Length - 1]))
+            {
+                // If so, add "0" before the plus operator
+                currentCalculation += "0";
+            }
             // This adds the number or operator to the string calculation
             currentCalculation += ((Button)sender).Text;
 
@@ -190,6 +240,12 @@ namespace Calculator
 
         private void buttonDivision_Click(object sender, EventArgs e)
         {
+            // Check if the current calculation is empty or ends with an operator
+            if (currentCalculation == "" || "+-×÷".Contains(currentCalculation[currentCalculation.Length - 1]))
+            {
+                // If so, add "0" before the plus operator
+                currentCalculation += "0";
+            }
             // This adds the number or operator to the string calculation
             currentCalculation += ((Button)sender).Text;
 

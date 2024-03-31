@@ -25,13 +25,18 @@
             return textBoxOutput;
         }
 
+        private Button GetButtonEquals()
+        {
+            return buttonEquals;
+        }
+
         #region Windows Form Designer generated code
 
         /// <summary>
         ///  Required method for Designer support - do not modify
         ///  the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent(Button buttonEquals)
         {
             button1 = new Button();
             button2 = new Button();
@@ -318,6 +323,7 @@
             textBoxOutput.Size = new Size(480, 36);
             textBoxOutput.TabIndex = 0;
             textBoxOutput.TextAlign = HorizontalAlignment.Right;
+            textBoxOutput.Text = "0";
             textBoxOutput.TextChanged += TextBoxOutput_TextChanged;
             // 
             // Form1
