@@ -1,3 +1,3 @@
 # C# Calculator
 
-Download the .exe no malware I promise!!!!
+Made with the .net frame work in Visual Studio, compile and run from there to deploy
